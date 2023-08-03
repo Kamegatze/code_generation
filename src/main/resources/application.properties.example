@@ -1,0 +1,16 @@
+#config db
+spring.datasource.url=your_url
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.username=your_login
+spring.datasource.password=your_password
+
+
+#jpa
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.generate-ddl=true
+spring.jpa.show-sql=true
+
+#jwt
+app.secret=your_secret_code
+app.time=your_time_life_token

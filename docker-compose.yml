@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  postgres:
+    container_name: postgres_container
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=t62241299A
+      - POSTGRES_DB=code_generation
+    image: postgres:13.11-bullseye
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/code_generation
+
+volumes:
+  postgres_data:
