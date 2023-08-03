@@ -2,6 +2,7 @@ package com.kamegatze.code_generation.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -25,16 +26,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "You nickname can't equal empty")
-    @Min(value = 2, message = "You nickname must be more 2 sign")
     private String nickname;
 
-    @Email(message = "Please input correct email")
-    @NotNull(message = "You email can't equal empty")
     private String email;
 
-    @NotNull(message = "Please input your password")
-    @Min(value = 8, message = "You password must be more 8 sign")
     private String password;
 
     @ManyToOne

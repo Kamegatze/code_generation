@@ -6,6 +6,7 @@ import com.kamegatze.code_generation.dto.auth.JwtDto;
 import com.kamegatze.code_generation.dto.auth.RegistrationDTO;
 import com.kamegatze.code_generation.dto.auth.SignInDto;
 import com.kamegatze.code_generation.services.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class AuthController {
      * */
     @PostMapping("/registration")
     public ResponseEntity<RegistrationDTO> handleRegistration(
-            @RequestBody RegistrationDTO registration)
+           @Valid @RequestBody RegistrationDTO registration)
             throws NicknameExistException, EmailExistException, SQLException {
 
         registration = authenticationService.handleRegistration(registration);
@@ -70,7 +71,7 @@ public class AuthController {
      * End point for extradition jwt token after authentication and authorization in system
      * */
     @PostMapping("/sign_in")
-    public ResponseEntity<JwtDto> handleSignIn(@RequestBody SignInDto sign) {
+    public ResponseEntity<JwtDto> handleSignIn(@RequestBody @Valid SignInDto sign) {
 
         JwtDto jwtDto = authenticationService.handleSignIn(sign);
 
