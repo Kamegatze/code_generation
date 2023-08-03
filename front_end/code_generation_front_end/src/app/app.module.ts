@@ -10,6 +10,7 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { SwitchPasswordComponent } from './components/switch-password/switch-password.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { HeaderComponent } from './components/header/header.component';
         AppRoutingModule,
         NgbModule,
         ReactiveFormsModule,
+        HttpClientModule,
     ],
   providers: [],
   bootstrap: [AppComponent]
