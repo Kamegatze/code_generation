@@ -1,1 +1,41 @@
-<p>registration works!</p>
+<div class="h-100 d-flex justify-content-center align-items-center">
+  <form class="w-25" [formGroup]="registration">
+    <div class="text-center my-3">
+      <h3>Регистрация</h3>
+    </div>
+    <div class="my-3">
+      <label class="form-label">Ваш никнейм</label>
+      <input class="form-control" type="text" formControlName="nickname">
+      <p *ngIf="registration.get('nickname')?.invalid && registration.get('nickname')?.touched"
+         class="text-danger"
+      >Введите nickname больше 2 символов</p>
+    </div>
+    <div class="my-3">
+      <label class="form-label">Ваш email</label>
+      <input class="form-control" type="email" formControlName="email">
+      <p *ngIf="registration.get('email')?.invalid && registration.get('email')?.touched"
+         class="text-danger"
+      >Введите правильный email</p>
+    </div>
+    <div class="my-3">
+      <label class="form-label">Ваш пороль</label>
+      <input  class="form-control" type="password" formControlName="password">
+      <p *ngIf="registration.get('password')?.invalid && registration.get('password')?.touched"
+         class="text-danger"
+      >Пороль должен быть больше 8 символов</p>
+    </div>
+    <div class="my-3">
+      <label class="form-label">Повторите ещё раз...</label>
+      <input
+              class="form-control"
+              type="password"
+              [(ngModel)]="correctPassword"
+              [ngModelOptions]="{standalone: true}"
+      >
+      <p *ngIf="!isCorrectPassword(correctPassword, registration.get('password')?.value)" class="text-danger">Пороли не совпадают</p>
+    </div>
+    <div class="my-3">
+      <button [disabled]="registration.invalid" (click)="submit()" class="btn btn-primary">Зарегистрироваться</button>
+    </div>
+  </form>
+</div>
