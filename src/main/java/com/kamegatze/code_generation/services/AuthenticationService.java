@@ -99,8 +99,6 @@ public class AuthenticationService {
         String token = jwtUtils.generationJwtToken(authentication);
 
         JwtDto jwtDto = JwtDto.builder()
-                .login(sign.getLogin())
-                .password(sign.getPassword())
                 .token(token)
                 .build();
 
