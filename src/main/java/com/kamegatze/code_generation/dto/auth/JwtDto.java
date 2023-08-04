@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JwtDto {
     private String token;
-    private String login;
-    private String password;
 }
