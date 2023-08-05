@@ -86,13 +86,10 @@ public class AuthController {
 
     @PostMapping("/switch_password")
     public ResponseEntity<?> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword) {
-        User user = authenticationService.searchUser(switchPassword);
 
-        emailService.sendMail(user.getEmail(),
-                "Смена пароля",
-                "Тестовое письмо");
+        emailService.handlerSwitchPassword(switchPassword);
 
         return ResponseEntity.ok(Map.of("message",
-                "Для восстановления пароля перейдите по ссылке на вашей почте"));
+                "request send email user: " + switchPassword.getLogin()));
     }
 }

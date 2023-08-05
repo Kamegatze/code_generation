@@ -32,6 +32,8 @@ public class User {
 
     private String password;
 
+    private String switch_password_code;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
