@@ -16,14 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class CustomUserDetailsService implements UserDetailsService {
 
-
     private final UserRepository userRepository;
-
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByNickname(username)
+        User user = userRepository.findByEmailOrNickname(username, username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with nickname: " + username));
 
         return new CustomUserDetails(user);

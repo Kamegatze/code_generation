@@ -5,7 +5,10 @@ import com.kamegatze.code_generation.custom_exception.NicknameExistException;
 import com.kamegatze.code_generation.dto.auth.JwtDto;
 import com.kamegatze.code_generation.dto.auth.RegistrationDTO;
 import com.kamegatze.code_generation.dto.auth.SignInDto;
+import com.kamegatze.code_generation.dto.auth.SwitchPassword;
+import com.kamegatze.code_generation.entities.User;
 import com.kamegatze.code_generation.services.AuthenticationService;
+import com.kamegatze.code_generation.services.EmailServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 
 /**
@@ -27,6 +31,8 @@ import java.sql.SQLException;
 public class AuthController {
 
     private final AuthenticationService authenticationService;
+
+    private final EmailServiceImpl emailService;
 
 
     /**
@@ -76,5 +82,17 @@ public class AuthController {
         JwtDto jwtDto = authenticationService.handleSignIn(sign);
 
         return ResponseEntity.ok(jwtDto);
+    }
+
+    @PostMapping("/switch_password")
+    public ResponseEntity<?> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword) {
+        User user = authenticationService.searchUser(switchPassword);
+
+        emailService.sendMail(user.getEmail(),
+                "Смена пароля",
+                "Тестовое письмо");
+
+        return ResponseEntity.ok(Map.of("message",
+                "Для восстановления пароля перейдите по ссылке на вашей почте"));
     }
 }

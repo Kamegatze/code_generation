@@ -6,6 +6,7 @@ import com.kamegatze.code_generation.custom_exception.NicknameExistException;
 import com.kamegatze.code_generation.dto.auth.JwtDto;
 import com.kamegatze.code_generation.dto.auth.RegistrationDTO;
 import com.kamegatze.code_generation.dto.auth.SignInDto;
+import com.kamegatze.code_generation.dto.auth.SwitchPassword;
 import com.kamegatze.code_generation.entities.ERole;
 import com.kamegatze.code_generation.entities.Role;
 import com.kamegatze.code_generation.entities.User;
@@ -17,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,16 @@ public class AuthenticationService {
 
     private final JwtUtils jwtUtils;
 
+
+    /**
+     * Method for find user on email or nickname
+     * */
+    public User searchUser(SwitchPassword switchPassword) {
+
+        return userRepository.findByEmailOrNickname(switchPassword.getLogin(),
+                        switchPassword.getLogin())
+                .orElseThrow(() -> new UsernameNotFoundException("A user with this username was not found"));
+    }
 
     /**
      * method for registration user in system
