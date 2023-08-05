@@ -18,7 +18,7 @@
       >Введите правильный email</p>
     </div>
     <div class="my-3">
-      <label class="form-label">Ваш пороль</label>
+      <label class="form-label">Ваш пароль</label>
       <input  class="form-control" type="password" formControlName="password">
       <p *ngIf="registration.get('password')?.invalid && registration.get('password')?.touched"
          class="text-danger"
