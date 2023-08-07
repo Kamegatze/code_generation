@@ -51,7 +51,7 @@ public class AuthenticationService {
     /**
      * Method for find user on email or nickname
      * */
-    public User searchUser(SwitchPassword switchPassword) {
+    public User searchUser(SwitchPassword switchPassword) throws UsernameNotFoundException {
 
         return userRepository.findByEmailOrNickname(switchPassword.getLogin(),
                         switchPassword.getLogin())

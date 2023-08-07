@@ -1,6 +1,7 @@
 package com.kamegatze.code_generation.controllers;
 
 import com.kamegatze.code_generation.custom_exception.EmailExistException;
+import com.kamegatze.code_generation.custom_exception.EnterCodeException;
 import com.kamegatze.code_generation.custom_exception.NicknameExistException;
 import com.kamegatze.code_generation.dto.auth.JwtDto;
 import com.kamegatze.code_generation.dto.auth.RegistrationDTO;
@@ -13,10 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -85,11 +84,20 @@ public class AuthController {
     }
 
     @PostMapping("/switch_password")
-    public ResponseEntity<?> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword) {
+    public ResponseEntity<?> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword)
+            throws UsernameNotFoundException {
 
         emailService.handlerSwitchPassword(switchPassword);
 
         return ResponseEntity.ok(Map.of("message",
                 "request send email user: " + switchPassword.getLogin()));
+    }
+
+    @GetMapping("/check_code")
+    public ResponseEntity<?> handleCheckCode(@RequestParam String code) throws EnterCodeException {
+
+        Boolean exist = emailService.handelCheckCode(code);
+
+        return ResponseEntity.ok(Map.of("exist", exist));
     }
 }

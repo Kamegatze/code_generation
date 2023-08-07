@@ -1,5 +1,6 @@
 package com.kamegatze.code_generation.services;
 
+import com.kamegatze.code_generation.custom_exception.EnterCodeException;
 import com.kamegatze.code_generation.dto.auth.SwitchPassword;
 import com.kamegatze.code_generation.entities.User;
 import com.kamegatze.code_generation.repositories.UserRepository;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,22 +32,39 @@ public class EmailServiceImpl {
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(text);
+        simpleMailMessage.setBcc(this.from);
 
         javaMailSender.send(simpleMailMessage);
     }
 
     @Transactional
-    public void  handlerSwitchPassword(SwitchPassword switchPassword) {
+    public void  handlerSwitchPassword(SwitchPassword switchPassword) throws UsernameNotFoundException {
         User user = authenticationService.searchUser(switchPassword);
 
-        int code = (int) (Math.random()*100000) + 100000;
+        int onePartCode = (int) (Math.random() * 99) + 100;
+
+        int twoPartCode = (int) (Math.random() * 99) + 100;
+
+        String code = onePartCode + "-" + twoPartCode;
 
         sendMail(user.getEmail(),
                 "Смена пароля",
-                "Пожалуйста, введите данный ключ для смена пароля:\n " + code);
+                "Пожалуйста, введите данный ключ для смена пароля: " + code);
 
-        user.setSwitch_password_code(String.valueOf(code));
+        user.setSwitchPasswordCode(code);
 
         userRepository.save(user);
+    }
+
+    @Transactional
+    public Boolean handelCheckCode(String code) throws EnterCodeException {
+        User user = userRepository.findBySwitchPasswordCode(code)
+                .orElseThrow(() -> new EnterCodeException("code enter incorrect"));
+
+        user.setSwitchPasswordCode("");
+
+        userRepository.save(user);
+
+        return Boolean.TRUE;
     }
 }
