@@ -1,0 +1,14 @@
+<form [formGroup]="switch_password_form">
+  <div class="my-3">
+    <label class="form-label">Введите логин</label>
+    <input formControlName="login" class="form-control">
+    <p class="text-danger" *ngIf="!switch_password_response.exist || (switch_password_form.get('login')?.touched && switch_password_form.get('login')?.invalid)"
+    >
+      Данного пользователя не существует или вы ввели некорректные данные. Длина строки должна быть больше двух символов
+    </p>
+  </div>
+  <div class="my-3">
+    <button [disabled]="switch_password_form.invalid" type="button" (click)="submit()" class="btn btn-primary">Далее</button>
+  </div>
+</form>
+

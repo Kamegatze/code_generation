@@ -9,7 +9,11 @@ const routes: Routes = [
 
   {path: "", redirectTo:"main", pathMatch:'full'},
   {path:"sign_up", component:RegistrationComponent},
-  {path:"switch-password", component:SwitchPasswordComponent}
+  {
+    path:"switch-password",
+    loadChildren: () => import('./components/switch-password/switch-password.module')
+      .then((module) => module.SwitchPasswordModule)
+  }
 ];
 
 @NgModule({

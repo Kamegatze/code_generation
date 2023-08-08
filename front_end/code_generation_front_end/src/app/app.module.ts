@@ -7,7 +7,6 @@ import { AuthUsersComponent } from './components/auth-users/auth-users.component
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegistrationComponent } from './components/registration/registration.component';
-import { SwitchPasswordComponent } from './components/switch-password/switch-password.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import {HttpClientModule} from "@angular/common/http";
@@ -18,7 +17,6 @@ import {HttpClientModule} from "@angular/common/http";
     AppComponent,
     AuthUsersComponent,
     RegistrationComponent,
-    SwitchPasswordComponent,
     FooterComponent,
     HeaderComponent,
   ],

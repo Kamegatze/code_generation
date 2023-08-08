@@ -1,0 +1,16 @@
+<form class="d-flex flex-column justify-content-center size_div" [formGroup]="code_email">
+  <div class="my-3 align-self-center">
+    <label class="form-label">Введите ваш код</label>
+    <div class="d-flex flex-row">
+      <input formControlName="onePart" class="form-control">
+      <h3 class="mx-3">-</h3>
+      <input formControlName="twoPart" class="form-control">
+    </div>
+    <div>
+      <p *ngIf="correction() || !code.exist" class="text-danger">Код не правильный</p>
+    </div>
+  </div>
+  <div class="my-3">
+    <button [disabled]="code_email.invalid" (click)="submit()" type="button" class="btn btn-primary">Далее</button>
+  </div>
+</form>
