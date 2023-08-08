@@ -38,7 +38,7 @@ public class EmailServiceImpl {
     }
 
     @Transactional
-    public void  handlerSwitchPassword(SwitchPassword switchPassword) throws UsernameNotFoundException {
+    public String handlerSwitchPassword(SwitchPassword switchPassword) throws UsernameNotFoundException {
         User user = authenticationService.searchUser(switchPassword);
 
         int onePartCode = (int) (Math.random() * 99) + 100;
@@ -54,16 +54,14 @@ public class EmailServiceImpl {
         user.setSwitchPasswordCode(code);
 
         userRepository.save(user);
+
+        return code;
     }
 
     @Transactional
     public Boolean handelCheckCode(String code) throws EnterCodeException {
         User user = userRepository.findBySwitchPasswordCode(code)
                 .orElseThrow(() -> new EnterCodeException("code enter incorrect"));
-
-        user.setSwitchPasswordCode("");
-
-        userRepository.save(user);
 
         return Boolean.TRUE;
     }

@@ -1,12 +1,7 @@
 package com.kamegatze.code_generation.services;
 
-import com.kamegatze.code_generation.custom_exception.AddNotExistRoleException;
-import com.kamegatze.code_generation.custom_exception.EmailExistException;
-import com.kamegatze.code_generation.custom_exception.NicknameExistException;
-import com.kamegatze.code_generation.dto.auth.JwtDto;
-import com.kamegatze.code_generation.dto.auth.RegistrationDTO;
-import com.kamegatze.code_generation.dto.auth.SignInDto;
-import com.kamegatze.code_generation.dto.auth.SwitchPassword;
+import com.kamegatze.code_generation.custom_exception.*;
+import com.kamegatze.code_generation.dto.auth.*;
 import com.kamegatze.code_generation.entities.ERole;
 import com.kamegatze.code_generation.entities.Role;
 import com.kamegatze.code_generation.entities.User;
@@ -24,7 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
-
+import java.util.concurrent.*;
 
 
 /**
@@ -117,4 +112,46 @@ public class AuthenticationService {
         return jwtDto;
     }
 
+    @Transactional
+    public void handleChangePassword(ChangePassword changePassword)
+            throws PasswordNotEqualsRetryPasswordException, EnterCodeException {
+        if(!changePassword.getNewPassword().equals(changePassword.getRetryPassword())) {
+            throw new PasswordNotEqualsRetryPasswordException("New password not equals with retry password");
+        }
+
+        User user = userRepository.findBySwitchPasswordCode(changePassword.getCode())
+                .orElseThrow(() -> new EnterCodeException("Login enter incorrect"));
+
+        user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+
+        user.setSwitchPasswordCode("");
+
+        userRepository.save(user);
+
+    }
+
+    @Transactional
+    public void handeRemoveCode(String code) throws EnterCodeException {
+        User user = userRepository.findBySwitchPasswordCode(code)
+                .orElseThrow(() -> new EnterCodeException("code enter incorrect"));
+
+        user.setSwitchPasswordCode("");
+
+        userRepository.save(user);
+    }
+
+    public void asyncRemoveCodeDelay(Integer minute, String code) throws ExecutionException, InterruptedException {
+        CompletableFuture<Void> deleteCode = CompletableFuture.runAsync(() -> {
+            ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.schedule(() -> {
+                try {
+                    handeRemoveCode(code);
+                } catch (EnterCodeException e) {
+                    throw new RuntimeException(e);
+                }
+            }, minute, TimeUnit.MINUTES);
+        });
+
+        deleteCode.get();
+    }
 }
