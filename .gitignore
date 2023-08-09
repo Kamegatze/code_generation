@@ -1,4 +1,4 @@
-src/main/resources/project/
+src/main/resources/projects/
 src/main/resources/application.properties
 front_end/code_generation_front_end/node_modules/
 front_end/code_generation_front_end/.angular/
