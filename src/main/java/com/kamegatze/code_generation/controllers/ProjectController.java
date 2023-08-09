@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestOperations;
 
+import java.io.IOException;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/project")
@@ -19,13 +22,15 @@ public class ProjectController {
 
     private final RestOperations restOperations;
     @PostMapping("/create")
-    public ResponseEntity<?> handleCreateProject(@RequestBody ProjectConfigDTO config) {
+    public ResponseEntity<?> handleCreateProject(@RequestBody ProjectConfigDTO config) throws IOException {
 
         String url = projectService.getUrl(config);
 
         byte[] zip = restOperations.getForObject(url, byte[].class);
 
-        return ResponseEntity.ok().build();
+        projectService.extractFiles(zip);
+
+        return ResponseEntity.ok(Map.of("message", "Project created!!!"));
     }
 
 }
