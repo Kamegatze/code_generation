@@ -67,7 +67,8 @@ export class SwitchPasswordService {
           }
 
           if(message[0].defaultMessage.indexOf('null') !== -1 || message[0].defaultMessage.indexOf('empty') !== -1) {
-            alert("Перейдите на страницу /switch-password и следуйте инструкции для смены пароля");
+            alert("Сейчас вы перейдете на страницу /switch-password/input-login для смена пароля следуйте дальнейшей инструкции");
+            this.router.navigate(['switch-password'])
           }
 
           return [];
