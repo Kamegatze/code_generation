@@ -58,6 +58,8 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/api/auth/service/**", "/api/info/**")
                                 .permitAll()
+                                .requestMatchers("/api/project/create")
+                                .hasAnyRole("USER", "MODERATOR")
                                 .anyRequest()
                                 .authenticated()
                 )
