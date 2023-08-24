@@ -1,4 +1,26 @@
 package com.kamegatze.code_generation.entities;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+@Getter
+@Setter
+@Builder
+@Table(name = "type",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"fullName"}))
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Type {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String  packageName;
+
+    private String nameClass;
+
+    private String fullName;
+
 }
