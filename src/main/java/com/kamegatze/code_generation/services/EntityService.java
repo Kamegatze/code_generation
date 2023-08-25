@@ -32,7 +32,9 @@ public class EntityService {
     public void buildClass(EntityConfigDto config) throws IOException, ClassNotFoundException {
 
         Map<String, String> fields = new HashMap<>();
-
+        /*
+        * Parse type from String to java.lang.String and etc;
+        * */
         for (String key : config.getFields().keySet()) {
             TypeStandard typeStandard = typeStandardRepository
                     .findByNameClass(
@@ -44,6 +46,9 @@ public class EntityService {
             fields.put(key, typeStandard.getFullName());
         }
 
+        /*
+        * Create generate entity
+        * */
         GenerateClass entity = GenerateEntity.builder()
                 .nameClass(config.getNameClass())
                 .nameProject(config.getNameProject())
@@ -54,6 +59,9 @@ public class EntityService {
 
         entity.toCreate();
 
+        /*
+        * Create entity Type and addition in db
+        * */
         Type type = Type.builder()
                 .fullName(config.getPackageName() +  "."
                         + config.getNameProject() +

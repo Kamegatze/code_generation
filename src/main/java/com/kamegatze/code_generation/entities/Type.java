@@ -23,4 +23,8 @@ public class Type {
 
     private String fullName;
 
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
+
 }
