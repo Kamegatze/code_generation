@@ -1,4 +1,4 @@
-package com.kamegatze.code_generation.dto.project;
+package com.kamegatze.code_generation.dto.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

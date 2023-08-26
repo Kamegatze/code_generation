@@ -1,4 +1,4 @@
-package com.kamegatze.code_generation.dto.auth;
+package com.kamegatze.code_generation.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ErrorMessage {
-
+@AllArgsConstructor
+public class Response {
     private String message;
-
+    private Integer code;
 }

@@ -57,7 +57,7 @@ public class AuthenticationService {
      * method for registration user in system
      * */
     @Transactional
-    public RegistrationDTO handleRegistration(RegistrationDTO registration)
+    public User handleRegistration(RegistrationDTO registration)
             throws EmailExistException, NicknameExistException, SQLException, AddNotExistRoleException {
 
         if(userRepository.existsByNickname(registration.getNickname()))
@@ -84,9 +84,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registration.getPassword()))
                 .build();
 
-        userRepository.save(user);
-
-        return registration;
+        return userRepository.save(user);
     }
 
 

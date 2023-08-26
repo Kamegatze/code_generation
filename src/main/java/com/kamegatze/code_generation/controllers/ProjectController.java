@@ -1,9 +1,9 @@
 package com.kamegatze.code_generation.controllers;
 
-import com.kamegatze.code_generation.dto.project.EntityCreateConfigDto;
 import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
 import com.kamegatze.code_generation.dto.project.ProjectDto;
-import com.kamegatze.code_generation.services.EntityService;
+import com.kamegatze.code_generation.dto.response.EResponse;
+import com.kamegatze.code_generation.dto.response.Response;
 import com.kamegatze.code_generation.services.ProjectService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,12 +23,10 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    private final EntityService entityService;
-
     private final RestOperations restOperations;
     @PostMapping("/create")
-    public ResponseEntity<?> handleCreateProject(@RequestBody ProjectConfigDTO config,
-                                                 HttpServletRequest request) throws IOException {
+    public ResponseEntity<Response> handleCreateProject(@RequestBody ProjectConfigDTO config,
+                                                        HttpServletRequest request) throws IOException {
 
         String url = projectService.getUrl(config);
 
@@ -39,9 +36,14 @@ public class ProjectController {
 
         projectService.extractFiles(zip, token, config.getBaseDirAndArtifactIdAndName());
 
+        Response response = Response.builder()
+                .message("Project " + config.getBaseDirAndArtifactIdAndName() + " was created")
+                .code(EResponse.RESPONSE_CREATED.getCode())
+                .build();
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of("message", "Project created!!!"));
+                .body(response);
     }
 
     @GetMapping("/get_project/{user_id}")
@@ -51,14 +53,6 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(projectDtos);
-    }
-
-    @PostMapping("/create_entity")
-    public ResponseEntity<?> handleCreateEntity(@RequestBody EntityCreateConfigDto config) throws IOException, ClassNotFoundException {
-
-        entityService.buildClass(config);
-
-        return ResponseEntity.ok().build();
     }
 
 }

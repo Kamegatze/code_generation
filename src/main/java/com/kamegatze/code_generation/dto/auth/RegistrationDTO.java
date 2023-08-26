@@ -13,7 +13,7 @@ import org.springframework.hateoas.RepresentationModel;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class RegistrationDTO extends RepresentationModel<RegistrationDTO> {
+public class RegistrationDTO {
 
     @NotNull(message = "You nickname can't equal empty")
     @Size(min = 2, message = "You nickname must be more 2 sign")

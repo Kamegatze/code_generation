@@ -5,6 +5,8 @@ import com.kamegatze.code_generation.custom_exception.EnterCodeException;
 import com.kamegatze.code_generation.custom_exception.NicknameExistException;
 import com.kamegatze.code_generation.custom_exception.PasswordNotEqualsRetryPasswordException;
 import com.kamegatze.code_generation.dto.auth.*;
+import com.kamegatze.code_generation.dto.response.EResponse;
+import com.kamegatze.code_generation.dto.response.Response;
 import com.kamegatze.code_generation.entities.User;
 import com.kamegatze.code_generation.services.AuthenticationService;
 import com.kamegatze.code_generation.services.EmailServiceImpl;
@@ -16,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.sql.SQLException;
 import java.util.Map;
@@ -59,17 +62,23 @@ public class AuthController {
      * }
      * */
     @PostMapping("/registration")
-    public ResponseEntity<RegistrationDTO> handleRegistration(
-           @Valid @RequestBody RegistrationDTO registration)
+    public ResponseEntity<Response> handleRegistration(
+            @Valid @RequestBody RegistrationDTO registration, UriComponentsBuilder uri)
             throws NicknameExistException, EmailExistException, SQLException {
 
-        registration = authenticationService.handleRegistration(registration);
+        User user = authenticationService.handleRegistration(registration);
 
-        Link link = Link.of("http://api/users/" + registration.getNickname());
+        Response response = Response.builder()
+                .message("User " + user.getNickname() + " was created")
+                .code(EResponse.RESPONSE_CREATED.getCode())
+                .build();
 
-        registration.add(link);
-
-        return ResponseEntity.ok(registration);
+        return ResponseEntity.created(
+                uri.path("/api/user/{id}")
+                        .build(Map.of("id", user.getId()))
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 
 
@@ -89,27 +98,39 @@ public class AuthController {
      * and remove this code via 5 minute
      * */
     @PostMapping("/switch_password")
-    public ResponseEntity<?> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword)
+    public ResponseEntity<Response> handleSwitchPassword(@RequestBody @Valid SwitchPassword switchPassword)
             throws UsernameNotFoundException, ExecutionException, InterruptedException {
 
        String code = emailService.handlerSwitchPassword(switchPassword);
 
        authenticationService.asyncRemoveCodeDelay(5, code);
 
-       return ResponseEntity.ok(Map.of("exist",
-               true, "message", "user exist"));
+       Response response = Response.builder()
+                .message("Code for change the password was sent on your email")
+                .code(EResponse.RESPONSE_SWITCH_PASSWORD.getCode())
+                .build();
+
+       return ResponseEntity.status(HttpStatus.OK)
+               .contentType(MediaType.APPLICATION_JSON)
+               .body(response);
     }
 
     /**
      * End point for check code and remove this code
      * */
     @GetMapping("/check_code")
-    public ResponseEntity<?> handleCheckCode(@RequestParam String code) throws EnterCodeException {
+    public ResponseEntity<Response> handleCheckCode(@RequestParam String code) throws EnterCodeException {
 
         Boolean exist = emailService.handelCheckCode(code);
 
-        return ResponseEntity.ok(Map.of("exist", exist,
-                "message", "user exist"));
+        Response response = Response.builder()
+                .message("Temporary code was confirmed")
+                .code(EResponse.RESPONSE_CONFIRMED_CODE.getCode())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
     }
 
     /**
@@ -122,12 +143,17 @@ public class AuthController {
      * }
      * */
     @PostMapping("/change_password")
-    public ResponseEntity<?> handleChangePassword(@Valid @RequestBody ChangePassword changePassword)
+    public ResponseEntity<Response> handleChangePassword(@Valid @RequestBody ChangePassword changePassword)
             throws PasswordNotEqualsRetryPasswordException, EnterCodeException {
-       authenticationService.handleChangePassword(changePassword);
+        authenticationService.handleChangePassword(changePassword);
 
-       return ResponseEntity.status(HttpStatus.OK)
+        Response response = Response.builder()
+                .message("Your password was change")
+                .code(EResponse.RESPONSE_CHANGE_PASSWORD.getCode())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK)
                .contentType(MediaType.APPLICATION_JSON)
-               .body(Map.of("message", "Your password change"));
+               .body(response);
     }
 }

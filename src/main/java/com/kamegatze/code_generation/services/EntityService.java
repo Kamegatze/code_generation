@@ -1,6 +1,6 @@
 package com.kamegatze.code_generation.services;
 
-import com.kamegatze.code_generation.dto.project.EntityCreateConfigDto;
+import com.kamegatze.code_generation.dto.entities.EntityCreateConfigDto;
 import com.kamegatze.code_generation.entities.ETypeStandard;
 import com.kamegatze.code_generation.entities.Type;
 import com.kamegatze.code_generation.entities.TypeStandard;
