@@ -1,6 +1,6 @@
 package com.kamegatze.code_generation.services;
 
-import com.kamegatze.code_generation.dto.project.EntityConfigDto;
+import com.kamegatze.code_generation.dto.project.EntityCreateConfigDto;
 import com.kamegatze.code_generation.entities.ETypeStandard;
 import com.kamegatze.code_generation.entities.Type;
 import com.kamegatze.code_generation.entities.TypeStandard;
@@ -29,7 +29,7 @@ public class EntityService {
     private final TypeStandardRepository typeStandardRepository;
 
     @Transactional
-    public void buildClass(EntityConfigDto config) throws IOException, ClassNotFoundException {
+    public void buildClass(EntityCreateConfigDto config) throws IOException, ClassNotFoundException {
 
         Map<String, String> fields = new HashMap<>();
         /*

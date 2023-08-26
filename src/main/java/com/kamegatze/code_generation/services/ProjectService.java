@@ -1,6 +1,7 @@
 package com.kamegatze.code_generation.services;
 
 import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
+import com.kamegatze.code_generation.dto.project.ProjectDto;
 import com.kamegatze.code_generation.entities.Project;
 import com.kamegatze.code_generation.entities.User;
 import com.kamegatze.code_generation.jwt.JwtUtils;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -139,5 +141,14 @@ public class ProjectService {
             bos.write(bytesIn, 0, read);
         }
         bos.close();
+    }
+
+    public List<ProjectDto> getProjectsByUser(Long id) {
+        List<Project> projects = userRepository.findById(id)
+                .orElseThrow().getProjects();
+
+        ProjectDto projectDto = new ProjectDto();
+
+        return projectDto.getProjects(projects);
     }
 }

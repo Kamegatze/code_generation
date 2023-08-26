@@ -1,8 +1,8 @@
 package com.kamegatze.code_generation.controllers;
 
-import com.kamegatze.code_generation.dto.auth.JwtDto;
-import com.kamegatze.code_generation.dto.project.EntityConfigDto;
+import com.kamegatze.code_generation.dto.project.EntityCreateConfigDto;
 import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
+import com.kamegatze.code_generation.dto.project.ProjectDto;
 import com.kamegatze.code_generation.services.EntityService;
 import com.kamegatze.code_generation.services.ProjectService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,8 +44,17 @@ public class ProjectController {
                 .body(Map.of("message", "Project created!!!"));
     }
 
+    @GetMapping("/get_project/{user_id}")
+    public ResponseEntity<List<ProjectDto>> handleGetProject(@PathVariable Long user_id) {
+        List<ProjectDto> projectDtos = projectService.getProjectsByUser(user_id);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(projectDtos);
+    }
+
     @PostMapping("/create_entity")
-    public ResponseEntity<?> handleCreateEntity(@RequestBody EntityConfigDto config) throws IOException, ClassNotFoundException {
+    public ResponseEntity<?> handleCreateEntity(@RequestBody EntityCreateConfigDto config) throws IOException, ClassNotFoundException {
 
         entityService.buildClass(config);
 

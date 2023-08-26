@@ -6,13 +6,19 @@ import lombok.*;
 import java.util.List;
 
 
-@Table
+
 @Entity
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        name = "project",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = "name"
+        )
+)
 public class Project {
 
     @Id
