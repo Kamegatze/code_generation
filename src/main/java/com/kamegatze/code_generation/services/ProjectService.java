@@ -89,7 +89,7 @@ public class ProjectService {
         return headerAuth.substring(7);
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public void extractFiles(byte[] zip, String token, String nameProject) throws IOException {
 
         String id = this.jwtUtils.getIdUser(token);
