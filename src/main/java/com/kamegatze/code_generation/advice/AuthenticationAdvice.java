@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 @ControllerAdvice(assignableTypes = AuthController.class)
 public class AuthenticationAdvice {
