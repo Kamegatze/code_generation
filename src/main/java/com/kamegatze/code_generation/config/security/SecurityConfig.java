@@ -52,15 +52,14 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/api/auth/service/**", "/api/info/**")
+                                .requestMatchers("/api/auth/service/**")
                                 .permitAll()
                                 .requestMatchers("/api/project/**")
-                                .permitAll()
-//                                .hasAnyRole("USER", "MODERATOR")
+                                .hasAnyRole("USER", "MODERATOR")
                                 .anyRequest()
                                 .authenticated()
                 )

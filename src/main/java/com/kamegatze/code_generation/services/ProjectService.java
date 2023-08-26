@@ -1,17 +1,33 @@
 package com.kamegatze.code_generation.services;
 
 import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
+import com.kamegatze.code_generation.entities.Project;
+import com.kamegatze.code_generation.entities.User;
+import com.kamegatze.code_generation.jwt.JwtUtils;
+import com.kamegatze.code_generation.repositories.ProjectRepository;
+import com.kamegatze.code_generation.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ProjectService {
+
+    private final JwtUtils jwtUtils;
+
+    private final UserRepository userRepository;
+
+    private final ProjectRepository projectRepository;
 
     private final String url = "https://start.spring.io/starter.zip?" +
             "type=%s&" +
@@ -61,8 +77,34 @@ public class ProjectService {
          );
     }
 
-    public void extractFiles(byte[] zip) throws IOException {
-        unzip(zip, path);
+    public String getJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if(!(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))) {
+            return null;
+        }
+
+        return headerAuth.substring(7);
+    }
+
+    @Transactional(readOnly = false)
+    public void extractFiles(byte[] zip, String token, String nameProject) throws IOException {
+
+        String id = this.jwtUtils.getIdUser(token);
+
+        unzip(zip, path + "/" + id);
+
+        User user = userRepository.findById(Long.valueOf(id))
+                .orElseThrow();
+
+        Project project = Project.builder()
+                .name(nameProject)
+                .user(user)
+                .build();
+
+        user.getProjects().add(project);
+
+        projectRepository.save(project);
     }
 
     private static void unzip(byte[] data, String dirName) throws IOException {

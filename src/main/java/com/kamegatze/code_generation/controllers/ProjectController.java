@@ -1,9 +1,11 @@
 package com.kamegatze.code_generation.controllers;
 
+import com.kamegatze.code_generation.dto.auth.JwtDto;
 import com.kamegatze.code_generation.dto.project.EntityConfigDto;
 import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
 import com.kamegatze.code_generation.services.EntityService;
 import com.kamegatze.code_generation.services.ProjectService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,13 +27,16 @@ public class ProjectController {
 
     private final RestOperations restOperations;
     @PostMapping("/create")
-    public ResponseEntity<?> handleCreateProject(@RequestBody ProjectConfigDTO config) throws IOException {
+    public ResponseEntity<?> handleCreateProject(@RequestBody ProjectConfigDTO config,
+                                                 HttpServletRequest request) throws IOException {
 
         String url = projectService.getUrl(config);
 
         byte[] zip = restOperations.getForObject(url, byte[].class);
 
-        projectService.extractFiles(zip);
+        String token = projectService.getJwt(request);
+
+        projectService.extractFiles(zip, token, config.getBaseDirAndArtifactIdAndName());
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)

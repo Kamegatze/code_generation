@@ -1,15 +1,14 @@
 package com.kamegatze.code_generation.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor
@@ -37,5 +36,5 @@ public class User {
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<Project> projects;
+    private final List<Project> projects = new ArrayList<>();
 }
