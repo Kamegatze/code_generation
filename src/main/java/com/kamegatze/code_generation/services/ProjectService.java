@@ -143,7 +143,10 @@ public class ProjectService {
         bos.close();
     }
 
-    public List<ProjectDto> getProjectsByUser(Long id) {
+    public List<ProjectDto> getProjectsByUser(HttpServletRequest httpServletRequest) {
+
+        Long id = Long.valueOf(jwtUtils.getIdUser(getJwt(httpServletRequest)));
+
         List<Project> projects = userRepository.findById(id)
                 .orElseThrow().getProjects();
 

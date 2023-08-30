@@ -46,9 +46,9 @@ public class ProjectController {
                 .body(response);
     }
 
-    @GetMapping("/get_project/{user_id}")
-    public ResponseEntity<List<ProjectDto>> handleGetProject(@PathVariable Long user_id) {
-        List<ProjectDto> projectDtos = projectService.getProjectsByUser(user_id);
+    @GetMapping("/get_project/")
+    public ResponseEntity<List<ProjectDto>> handleGetProject(HttpServletRequest httpServletRequest) {
+        List<ProjectDto> projectDtos = projectService.getProjectsByUser(httpServletRequest);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
