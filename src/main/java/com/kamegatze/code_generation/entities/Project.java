@@ -3,6 +3,7 @@ package com.kamegatze.code_generation.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,5 +33,5 @@ public class Project {
     private User user;
 
     @OneToMany(mappedBy = "project")
-    private List<Type> types;
+    private final List<Type> types = new ArrayList<>();
 }

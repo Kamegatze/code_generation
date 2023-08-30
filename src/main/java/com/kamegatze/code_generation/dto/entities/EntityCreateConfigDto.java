@@ -17,6 +17,8 @@ public class EntityCreateConfigDto {
     private String nameProject;
 
     private String packageName;
+
+    private Long projectId;
     /*
     * key this name variable, and value this type variable
     * */

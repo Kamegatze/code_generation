@@ -60,6 +60,8 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/api/project/**")
                                 .hasAnyRole("USER", "MODERATOR")
+                                .requestMatchers("/api/entity/**")
+                                .hasAnyRole("USER", "MODERATOR")
                                 .anyRequest()
                                 .authenticated()
                 )
