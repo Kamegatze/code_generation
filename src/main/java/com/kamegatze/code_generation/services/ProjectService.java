@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.util.List;
-import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -90,7 +89,7 @@ public class ProjectService {
     }
 
     @Transactional
-    public void extractFiles(byte[] zip, String token, String nameProject) throws IOException {
+    public void extractFiles(byte[] zip, String token, ProjectConfigDTO config) throws IOException {
 
         String id = this.jwtUtils.getIdUser(token);
 
@@ -100,7 +99,11 @@ public class ProjectService {
                 .orElseThrow();
 
         Project project = Project.builder()
-                .name(nameProject)
+                .name(config.getBaseDirAndArtifactIdAndName())
+                .packageName(config.getGroupId())
+                .fullPackageName(config.getPackageName())
+                .type(config.getType())
+                .bootVersion(config.getBootVersion())
                 .user(user)
                 .build();
 

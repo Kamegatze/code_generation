@@ -34,7 +34,7 @@ public class ProjectController {
 
         String token = projectService.getJwt(request);
 
-        projectService.extractFiles(zip, token, config.getBaseDirAndArtifactIdAndName());
+        projectService.extractFiles(zip, token, config);
 
         Response response = Response.builder()
                 .message("Project " + config.getBaseDirAndArtifactIdAndName() + " was created")

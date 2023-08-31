@@ -27,6 +27,18 @@ public class Project {
     private Long id;
 
     private String name;
+    /*
+    * groupId
+    * */
+    private String packageName;
+    /*
+    * packageName
+    * */
+    private String fullPackageName;
+
+    private String type;
+
+    private String bootVersion;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
