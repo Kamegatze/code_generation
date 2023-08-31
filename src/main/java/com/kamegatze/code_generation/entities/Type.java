@@ -3,6 +3,9 @@ package com.kamegatze.code_generation.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -27,4 +30,6 @@ public class Type {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
+    @OneToMany(mappedBy = "type")
+    private final List<Fields> fields = new ArrayList<>();
 }

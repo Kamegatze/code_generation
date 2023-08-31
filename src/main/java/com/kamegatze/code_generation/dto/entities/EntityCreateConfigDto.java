@@ -12,11 +12,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EntityCreateConfigDto {
+
     private String nameClass;
-
-    private String nameProject;
-
-    private String packageName;
 
     private Long projectId;
     /*

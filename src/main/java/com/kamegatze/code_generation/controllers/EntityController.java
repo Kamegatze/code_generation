@@ -6,6 +6,7 @@ import com.kamegatze.code_generation.dto.response.EResponse;
 import com.kamegatze.code_generation.dto.response.Response;
 import com.kamegatze.code_generation.entities.Type;
 import com.kamegatze.code_generation.services.EntityService;
+import com.kamegatze.code_generation.services.FieldsService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,9 @@ import java.util.Map;
 public class EntityController {
 
     private final EntityService entityService;
-    
+
+    private final FieldsService fieldsService;
+
     @PostMapping("/create_entity")
     public ResponseEntity<Response> handleCreateEntity(
             @RequestBody EntityCreateConfigDto config,
@@ -35,6 +38,8 @@ public class EntityController {
         String token = entityService.getJwt(httpServletRequest);
 
         Type type = entityService.buildClass(config, token);
+
+        fieldsService.saveAll(config.getFields(), type);
 
         Response response = Response.builder()
                 .message("Entity " + config.getNameClass() + " was created")

@@ -2,13 +2,11 @@ package com.kamegatze.code_generation.services;
 
 import com.kamegatze.code_generation.dto.entities.EntityCreateConfigDto;
 import com.kamegatze.code_generation.dto.entities.TypeDto;
-import com.kamegatze.code_generation.entities.ETypeStandard;
-import com.kamegatze.code_generation.entities.Project;
-import com.kamegatze.code_generation.entities.Type;
-import com.kamegatze.code_generation.entities.TypeStandard;
+import com.kamegatze.code_generation.entities.*;
 import com.kamegatze.code_generation.jwt.JwtUtils;
 import com.kamegatze.code_generation.logic_generate.GenerateClass;
 import com.kamegatze.code_generation.logic_generate.GenerateEntity;
+import com.kamegatze.code_generation.repositories.FieldsRepository;
 import com.kamegatze.code_generation.repositories.ProjectRepository;
 import com.kamegatze.code_generation.repositories.TypeRepository;
 import com.kamegatze.code_generation.repositories.TypeStandardRepository;
@@ -69,32 +67,30 @@ public class EntityService {
             fields.put(key, typeStandard.getFullName());
         }
 
+        Project project = projectRepository.findById(config.getProjectId())
+                .orElseThrow();
+
         /*
         * Create generate entity
         * */
         GenerateClass entity = GenerateEntity.builder()
                 .nameClass(config.getNameClass())
-                .nameProject(config.getNameProject())
-                .packageName(config.getPackageName())
+                .nameProject(project.getName())
+                .packageName(project.getPackageName())
                 .path(this.path + "/" + userId)
                 .fields(fields)
                 .build();
 
         entity.toCreate();
 
-        Project project = projectRepository.findById(config.getProjectId())
-                .orElseThrow();
-
         /*
         * Create entity Type and addition in db
         * */
         Type type = Type.builder()
-                .fullName(config.getPackageName() +  "."
-                        + config.getNameProject() +
+                .fullName(project.getFullPackageName() +
                         ".entity." +
                         config.getNameClass())
-                .packageName(config.getPackageName() +  "."
-                        + config.getNameProject() +
+                .packageName(project.getFullPackageName() +
                         ".entity")
                 .nameClass(config.getNameClass())
                 .project(project)
