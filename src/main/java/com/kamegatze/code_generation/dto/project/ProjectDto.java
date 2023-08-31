@@ -21,6 +21,14 @@ public class ProjectDto {
 
     private String name;
 
+    private String packageName;
+
+    private String fullPackageName;
+
+    private String type;
+
+    private String bootVersion;
+
     public List<ProjectDto> getProjects(List<Project> projects) {
         List<ProjectDto> projectDtos = new ArrayList<>();
 
@@ -30,6 +38,10 @@ public class ProjectDto {
                     ProjectDto.builder()
                             .id(project.getId())
                             .name(project.getName())
+                            .packageName(project.getPackageName())
+                            .fullPackageName(project.getFullPackageName())
+                            .type(project.getType())
+                            .bootVersion(project.getBootVersion())
                             .build()
             );
         }
