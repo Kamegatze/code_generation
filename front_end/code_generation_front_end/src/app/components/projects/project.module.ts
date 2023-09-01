@@ -6,13 +6,15 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectComponent } from './project.component';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AdditionFieldsComponent } from './addition-fields/addition-fields.component';
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
     ProjectComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    AdditionFieldsComponent
   ],
   imports: [
     CommonModule,

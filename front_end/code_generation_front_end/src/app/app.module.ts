@@ -18,7 +18,7 @@ import { AuthInterceptor } from './services/_helpers/auth-intreceptor';
     AuthUsersComponent,
     RegistrationComponent,
     FooterComponent,
-    HeaderComponent,
+    HeaderComponent
   ],
     imports: [
         BrowserModule,

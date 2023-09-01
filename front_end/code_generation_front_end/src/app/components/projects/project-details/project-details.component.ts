@@ -55,7 +55,7 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
     });
 
     this.removeReote = this.route.params.subscribe(params => {
-      this.projectId = params['id'];
+      this.projectId = params['projectId'];
       this.entity$ = this.entityService.getEntityByProjectId(this.projectId);
     });
 
