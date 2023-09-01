@@ -29,4 +29,8 @@ export class EntityService {
   public getEntityById(id: number) : Observable<Entity> {
     return this.http.get<Entity>(`${this.config.getEntityUrl()}/${id}`);
   }
+
+  public deleteEntityById(id:number) : Observable<any> {
+    return this.http.get<any>(`${this.config.getEntityUrl()}/remove/${id}`);
+  }
 }

@@ -1,14 +1,15 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription, delay, of } from 'rxjs';
+import { Observable, Subscription, delay, map, of} from 'rxjs';
 import { Entity } from 'src/app/model/entity';
 import { FormEntity } from 'src/app/model/form-entity';
 import { TransferEntity } from 'src/app/model/transfer-entity';
 import { EntityService } from 'src/app/services/entity.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.Default,
   selector: 'app-project-details',
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.scss']
@@ -20,6 +21,8 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
   private removeReote!:Subscription;
 
   private removeCreate!:Subscription;
+
+  private removeDelete!:Subscription;
 
   protected isMoreZero:boolean = false;
 
@@ -33,7 +36,8 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
 
   constructor(
     private entityService: EntityService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
 
@@ -41,6 +45,7 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
     this.removeReote?.unsubscribe();
     this.removeEntity?.unsubscribe();
     this.removeCreate?.unsubscribe();
+    this.removeDelete?.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -56,20 +61,39 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
 
     this.removeEntity = this.entity$
     .subscribe(entity => {
-      this.isMoreZero = entity.length > 0
+      this.isMoreZero = entity.length > 0;
     });
   }
 
-  protected create() {
-    const enity:TransferEntity = <TransferEntity>{
+  protected remove(id: number) : void {
+
+    this.removeDelete?.unsubscribe();
+
+    this.removeDelete = this.entityService.deleteEntityById(id).subscribe();
+
+    this.removeEntity?.unsubscribe();
+
+    this.removeEntity = this.entity$
+      .pipe(
+        map(entities => entities.filter(entity => entity.id !== id))
+      ).subscribe(entities => {
+        this.entity$ = of<Entity[]>(entities);
+
+        this.isMoreZero = entities.length > 0;
+      });
+  }
+  protected create() : void {
+    const entity:TransferEntity = <TransferEntity>{
       nameClass: this.form.value.nameClass,
       projectId: this.projectId,
       fields: {}
     }
 
+    let entityById!:Entity;
+
     this.removeCreate?.unsubscribe();
 
-    this.removeCreate = this.entityService.createEntity(enity)
+    this.removeCreate = this.entityService.createEntity(entity)
     .subscribe(
       (resp:HttpResponse<object>) => {
         const url = resp.headers.get("Location")?.split("/");
@@ -77,20 +101,27 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
         const id = Number(url?.[url.length - 1]);
         
         this.entityService.getEntityById(id).subscribe(
-          enity => {
-
-            this.removeEntity?.unsubscribe();
-
-            this.removeEntity = this.entity$.subscribe(
-              entities => {
-                entities.push(enity);
-                this.entity$ = of<Entity[]>(entities);
-              }
-            )
+          entityFromServer => {
+            entityById = entityFromServer;
           }
         )
-      });
+      }
+    );
+    
+    
 
+    this.entity$.pipe(delay(200)).subscribe(entities => {
+      const index = entities.findIndex(element => element.nameClass === entity.nameClass);
+
+      if(index < 0) {
+        entities = [entityById, ...entities];
+      }
+
+      this.isMoreZero = entities.length > 0;
+
+      this.entity$ = of<Entity[]>(entities);
+    })
+    
   }
 
 }
