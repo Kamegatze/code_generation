@@ -24,6 +24,9 @@ public class CorsConfig {
                                 HttpHeaders.CONTENT_TYPE,
                                 HttpHeaders.ACCEPT
                         )
+                        .exposedHeaders(
+                                HttpHeaders.LOCATION
+                        )
                         .allowedMethods(
                                 HttpMethod.GET.name(),
                                 HttpMethod.POST.name(),
