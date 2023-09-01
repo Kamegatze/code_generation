@@ -17,6 +17,6 @@ export class RegistrationService {
   ) { }
 
   public sign_up(registration:Registration):Observable<ResponseAfterRegistration> {
-    return this.http.post<ResponseAfterRegistration>(`${this.configServer.authServiceUrl}/registration`, registration);
+    return this.http.post<ResponseAfterRegistration>(`${this.configServer.getAuthServiceUrl()}/registration`, registration);
   }
 }

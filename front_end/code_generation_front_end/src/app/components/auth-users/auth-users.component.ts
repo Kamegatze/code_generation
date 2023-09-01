@@ -29,7 +29,7 @@ export class AuthUsersComponent implements OnInit, OnDestroy{
   }
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
   ) {
   }
 

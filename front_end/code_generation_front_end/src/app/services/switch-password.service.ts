@@ -22,7 +22,7 @@ export class SwitchPasswordService {
   public sendLogin(switch_password:FormGroup) : Observable<SwitchPasswordResponse> {
 
     return this.http.post<SwitchPasswordResponse>
-    (`${this.configService.authServiceUrl}/switch_password`, switch_password.value)
+    (`${this.configService.getAuthServiceUrl()}/switch_password`, switch_password.value)
       .pipe(
         tap(() => {
           this.router.navigate(['switch-password/input-code'])
@@ -45,14 +45,14 @@ export class SwitchPasswordService {
   }
 
   public checkCode(code: string):Observable<SwitchPasswordResponse> {
-    return this.http.get<SwitchPasswordResponse>(`${this.configService.authServiceUrl}/check_code?code=${code}`)
+    return this.http.get<SwitchPasswordResponse>(`${this.configService.getAuthServiceUrl()}/check_code?code=${code}`)
       .pipe(
         tap(() => this.router.navigate(['switch-password/change-password']))
       );
   }
 
   public changePassword(changePassword:FormGroup<ChangePassword>) {
-    return this.http.post(`${this.configService.authServiceUrl}/change_password`, changePassword.value)
+    return this.http.post(`${this.configService.getAuthServiceUrl()}/change_password`, changePassword.value)
       .pipe(
         tap(() => {
           this.removeCode();

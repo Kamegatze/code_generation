@@ -1,0 +1,21 @@
+<div class="h-100 container">
+  <div class="row">
+    <div class="col-4" *ngFor="let project of projects$ | async">
+      <div class="card mx-1 my-1 col">
+        <div class="card-body">
+          <p class="text-center "><b>Имя проекта:</b> {{project.name}}</p>
+          <p class="text-center "><b>Имя package:</b> {{project.packageName}}</p>
+          <p class="text-center "><b>Полное имя package:</b> {{project.fullPackageName}}</p>
+          <p class="text-center "><b>Тип проекта:</b> {{project.type}}</p>
+          <p class="text-center "><b>Версия Spring Boot:</b> {{project.bootVersion}}</p>
+          <div class="d-flex justify-content-center align-items-center ">
+            <div class="d-flex">
+              <a [routerLink]="'../' + project.id" class="btn btn-primary mx-1">Перейти к проекту</a>
+              <button class="btn btn-danger mx-1 ">Удалить проект</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

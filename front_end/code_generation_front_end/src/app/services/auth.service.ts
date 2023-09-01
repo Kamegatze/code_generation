@@ -19,7 +19,7 @@ export class AuthService {
 
   public sign_in(login:Login) : Observable<ResponseServerAfterLogin> {
     return this.http.post<ResponseServerAfterLogin>
-    (`${this.configServer.authServiceUrl}/sign_in`, login)
+    (`${this.configServer.getAuthServiceUrl()}/sign_in`, login)
         .pipe(
           tap(() => this.router.navigate(['']))
         );
