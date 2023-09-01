@@ -30,6 +30,6 @@ public class Type {
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
     private final List<Fields> fields = new ArrayList<>();
 }
