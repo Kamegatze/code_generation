@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.nio.file.DirectoryNotEmptyException;
+import java.nio.file.NoSuchFileException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +49,20 @@ public class EntityController {
                 .build();
 
         return ResponseEntity.created(uri.path("/api/entity/{id}").build(Map.of("id", type.getId())))
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+    }
+
+    @GetMapping("/remove/{entityId}")
+    public ResponseEntity<Response> handlerRemoveEntityById(@PathVariable Long entityId, HttpServletRequest httpServletRequest) throws IOException {
+        entityService.removeById(entityId, httpServletRequest);
+
+        Response response = Response.builder()
+                .message("Entity with id: " + entityId + "was deleted")
+                .code(EResponse.RESPONSE_DELETED.getCode())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(response);
     }

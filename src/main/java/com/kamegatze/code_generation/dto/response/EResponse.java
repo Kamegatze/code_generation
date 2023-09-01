@@ -9,7 +9,8 @@ public enum EResponse {
     RESPONSE_NOT_FOUND(404),
     RESPONSE_SWITCH_PASSWORD(1),
     RESPONSE_CONFIRMED_CODE(2),
-    RESPONSE_CHANGE_PASSWORD(3),;
+    RESPONSE_CHANGE_PASSWORD(3),
+    RESPONSE_DELETED(4);
 
     private final Integer code;
     EResponse(Integer code) {

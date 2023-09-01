@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.*;
 import java.util.*;
 
 @Service
@@ -122,4 +124,24 @@ public class EntityService {
         return typeDto.fromTypeListToTypeDtoList(project.getTypes());
     }
 
+    private void deleteFromFolder(HttpServletRequest httpServletRequest, Long entityId) throws IOException {
+
+        String id = jwtUtils.getIdUser(getJwt(httpServletRequest));
+
+        Type type = typeRepository.findById(entityId).orElseThrow();
+
+        String pathPackage = type.getFullName().replace('.', '/') + ".java";
+
+        String path = this.path + "/" + id + "/" + type.getProject().getName() + "/src/main/java/" + pathPackage;
+
+        System.out.println(path);
+
+        Files.deleteIfExists(Paths.get(path));
+    }
+
+    @Transactional
+    public void removeById(Long entityId, HttpServletRequest httpServletRequest) throws IOException {
+        deleteFromFolder(httpServletRequest, entityId);
+        typeRepository.deleteById(entityId);
+    }
 }
