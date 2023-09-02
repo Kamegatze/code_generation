@@ -5,11 +5,13 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.kamegatze.code_generation.services.user_details.CustomUserDetails;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import com.auth0.jwt.JWT;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -88,5 +90,15 @@ public class JwtUtils {
     public String getIdUser(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         return JWT.require(algorithm).withIssuer("code_generation").build().verify(token).getId();
+    }
+
+    public static String getJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+
+        if(!(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))) {
+            return null;
+        }
+
+        return headerAuth.substring(7);
     }
 }

@@ -37,17 +37,6 @@ public class EntityService {
     private final ProjectRepository projectRepository;
 
     private final JwtUtils jwtUtils;
-
-    public String getJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-
-        if(!(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))) {
-            return null;
-        }
-
-        return headerAuth.substring(7);
-    }
-
     @Transactional
     public Type buildClass(EntityCreateConfigDto config, String token) throws IOException, ClassNotFoundException {
 
@@ -126,7 +115,7 @@ public class EntityService {
 
     private void deleteFromFolder(HttpServletRequest httpServletRequest, Long entityId) throws IOException {
 
-        String id = jwtUtils.getIdUser(getJwt(httpServletRequest));
+        String id = jwtUtils.getIdUser(JwtUtils.getJwt(httpServletRequest));
 
         Type type = typeRepository.findById(entityId).orElseThrow();
 

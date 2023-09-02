@@ -5,6 +5,7 @@ import com.kamegatze.code_generation.dto.entities.TypeDto;
 import com.kamegatze.code_generation.dto.response.EResponse;
 import com.kamegatze.code_generation.dto.response.Response;
 import com.kamegatze.code_generation.entities.Type;
+import com.kamegatze.code_generation.jwt.JwtUtils;
 import com.kamegatze.code_generation.services.EntityService;
 import com.kamegatze.code_generation.services.FieldsService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,7 +38,7 @@ public class EntityController {
             HttpServletRequest httpServletRequest
     ) throws IOException, ClassNotFoundException {
 
-        String token = entityService.getJwt(httpServletRequest);
+        String token = JwtUtils.getJwt(httpServletRequest);
 
         Type type = entityService.buildClass(config, token);
 

@@ -78,16 +78,6 @@ public class ProjectService {
          );
     }
 
-    public String getJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-
-        if(!(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer "))) {
-            return null;
-        }
-
-        return headerAuth.substring(7);
-    }
-
     @Transactional
     public void extractFiles(byte[] zip, String token, ProjectConfigDTO config) throws IOException {
 
@@ -148,7 +138,7 @@ public class ProjectService {
 
     public List<ProjectDto> getProjectsByUser(HttpServletRequest httpServletRequest) {
 
-        Long id = Long.valueOf(jwtUtils.getIdUser(getJwt(httpServletRequest)));
+        Long id = Long.valueOf(jwtUtils.getIdUser(JwtUtils.getJwt(httpServletRequest)));
 
         List<Project> projects = userRepository.findById(id)
                 .orElseThrow().getProjects();

@@ -4,6 +4,7 @@ import com.kamegatze.code_generation.dto.project.ProjectConfigDTO;
 import com.kamegatze.code_generation.dto.project.ProjectDto;
 import com.kamegatze.code_generation.dto.response.EResponse;
 import com.kamegatze.code_generation.dto.response.Response;
+import com.kamegatze.code_generation.jwt.JwtUtils;
 import com.kamegatze.code_generation.services.ProjectService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class ProjectController {
 
         byte[] zip = restOperations.getForObject(url, byte[].class);
 
-        String token = projectService.getJwt(request);
+        String token = JwtUtils.getJwt(request);
 
         projectService.extractFiles(zip, token, config);
 
