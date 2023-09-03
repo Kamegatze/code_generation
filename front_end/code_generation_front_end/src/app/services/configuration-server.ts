@@ -5,9 +5,10 @@ import {Injectable} from "@angular/core";
   })
 export class ConfigurationServer {
   private url = "http://localhost:8080/api"
-  private authServiceUrl = this.url + '/auth/service';
-  private projectUrl = `${this.url}/project`
-  private entityUrl = `${this.url}/entity`
+  private authServiceUrl = `${this.url}/auth/service`;
+  private projectUrl = `${this.url}/project`;
+  private entityUrl = `${this.url}/entity`;
+  private fieldsUrl = `${this.url}/fields`
 
   public getAuthServiceUrl() {
     return this.authServiceUrl;
@@ -19,5 +20,9 @@ export class ConfigurationServer {
 
   public getEntityUrl() {
     return this.entityUrl;
+  }
+
+  public getFieldsUrl() {
+    return this.fieldsUrl;
   }
 }

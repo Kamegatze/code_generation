@@ -11,7 +11,7 @@ const routes: Routes = [
     {path:"project-dashboard", component:DashboardComponent},
     {path: "", redirectTo:"project-dashboard", pathMatch:"full"},
     {path:":projectId", component:ProjectDetailsComponent},
-    {path:':projectId/fields/:entityId', component:AdditionFieldsComponent},
+    {path:'fields/:entityId', component:AdditionFieldsComponent},
   ]
 }
 ];

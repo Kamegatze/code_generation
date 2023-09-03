@@ -37,7 +37,6 @@ export class ProjectDetailsComponent implements OnInit, OnDestroy{
   constructor(
     private entityService: EntityService,
     private route: ActivatedRoute,
-    private changeDetector: ChangeDetectorRef
   ) {}
 
 
