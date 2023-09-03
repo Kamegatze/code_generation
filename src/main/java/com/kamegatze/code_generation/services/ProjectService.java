@@ -143,8 +143,6 @@ public class ProjectService {
         List<Project> projects = userRepository.findById(id)
                 .orElseThrow().getProjects();
 
-        ProjectDto projectDto = new ProjectDto();
-
-        return projectDto.getProjects(projects);
+        return ProjectDto.fromEntityToDto(projects);
     }
 }

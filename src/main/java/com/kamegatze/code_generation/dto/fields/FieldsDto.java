@@ -20,19 +20,15 @@ public class FieldsDto {
 
     private String nameType;
 
-    public List<FieldsDto> changeFieldsToFieldsDto(List<Fields> fields) {
-        List<FieldsDto> fieldsDtos = new ArrayList<>();
-
-        for (Fields field : fields) {
-            FieldsDto fieldsDto = FieldsDto.builder()
-                    .id(field.getId())
-                    .nameField(field.getNameField())
-                    .nameType(field.getNameType())
-                    .build();
-
-            fieldsDtos.add(fieldsDto);
-        }
-
-        return fieldsDtos;
+    public static List<FieldsDto> fromEntityToDto(List<Fields> fields) {
+        return fields.stream()
+                .map(item ->
+                        FieldsDto.builder()
+                                .id(item.getId())
+                                .nameField(item.getNameField())
+                                .nameType(item.getNameType())
+                                .build()
+                        )
+                .toList();
     }
 }

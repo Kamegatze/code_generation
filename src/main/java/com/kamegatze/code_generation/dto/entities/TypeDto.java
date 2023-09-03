@@ -22,20 +22,16 @@ public class TypeDto {
 
     private String fullName;
 
-    public List<TypeDto> fromTypeListToTypeDtoList(List<Type> types) {
-        List<TypeDto> typeDtos = new ArrayList<>();
-
-        for (Type type : types) {
-            TypeDto typeDto = TypeDto.builder()
-                    .id(type.getId())
-                    .fullName(type.getFullName())
-                    .nameClass(type.getNameClass())
-                    .packageName(type.getPackageName())
-                    .build();
-
-            typeDtos.add(typeDto);
-        }
-
-        return typeDtos;
+    public static List<TypeDto> fromEntityToDto(List<Type> types) {
+        return types.stream()
+                .map(item ->
+                        TypeDto.builder()
+                                .id(item.getId())
+                                .packageName(item.getPackageName())
+                                .nameClass(item.getNameClass())
+                                .fullName(item.getFullName())
+                                .build()
+                        )
+                .toList();
     }
 }

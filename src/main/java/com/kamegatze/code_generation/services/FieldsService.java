@@ -51,9 +51,7 @@ public class FieldsService {
     }
 
     public List<FieldsDto> getFieldsByTypeId(Long typeId) {
-        FieldsDto fieldsDto = new FieldsDto();
-
-        return fieldsDto.changeFieldsToFieldsDto(
+        return FieldsDto.fromEntityToDto(
                 typeRepository.findById(typeId)
                         .orElseThrow().getFields()
         );

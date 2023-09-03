@@ -106,11 +106,10 @@ public class EntityService {
     }
 
     public List<TypeDto> handleTypeByProjectId(Long projectId) {
+
         Project project = projectRepository.findById(projectId).orElseThrow();
 
-        TypeDto typeDto = new TypeDto();
-
-        return typeDto.fromTypeListToTypeDtoList(project.getTypes());
+        return TypeDto.fromEntityToDto(project.getTypes());
     }
 
     private void deleteFromFolder(HttpServletRequest httpServletRequest, Long entityId) throws IOException {

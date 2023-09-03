@@ -29,23 +29,19 @@ public class ProjectDto {
 
     private String bootVersion;
 
-    public List<ProjectDto> getProjects(List<Project> projects) {
-        List<ProjectDto> projectDtos = new ArrayList<>();
-
-        for (Project project : projects) {
-
-            projectDtos.add(
-                    ProjectDto.builder()
-                            .id(project.getId())
-                            .name(project.getName())
-                            .packageName(project.getPackageName())
-                            .fullPackageName(project.getFullPackageName())
-                            .type(project.getType())
-                            .bootVersion(project.getBootVersion())
-                            .build()
-            );
-        }
-
-        return projectDtos;
+    public static List<ProjectDto> fromEntityToDto(List<Project> projects) {
+        return projects.stream()
+                .map(item ->
+                        ProjectDto.builder()
+                                .id(item.getId())
+                                .name(item.getName())
+                                .packageName(item.getPackageName())
+                                .fullPackageName(item.getFullPackageName())
+                                .type(item.getType())
+                                .bootVersion(item.getBootVersion())
+                                .build()
+                        )
+                .toList();
     }
+
 }
