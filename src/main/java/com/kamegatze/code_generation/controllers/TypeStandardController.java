@@ -19,7 +19,7 @@ public class TypeStandardController {
 
     private final TypeStandardService typeStandardService;
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<TypeStandardDto>> handleGetTypeStandard() {
 
         return ResponseEntity.status(HttpStatus.OK)
