@@ -9,6 +9,7 @@ export class ConfigurationServer {
   private projectUrl = `${this.url}/project`;
   private entityUrl = `${this.url}/entity`;
   private fieldsUrl = `${this.url}/fields`
+  private typeStandardUrl = `${this.url}/type_standard`;
 
   public getAuthServiceUrl() {
     return this.authServiceUrl;
@@ -24,5 +25,9 @@ export class ConfigurationServer {
 
   public getFieldsUrl() {
     return this.fieldsUrl;
+  }
+
+  public getTypeStandardUrl() {
+    return this.typeStandardUrl;
   }
 }
